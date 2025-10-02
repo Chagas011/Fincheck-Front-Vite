@@ -6,8 +6,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-expect-error not-types
 import "swiper/css";
 import { AccountsNavigations } from "./AccountsNavigations";
+import { useAccountController } from "./useAccountController";
 
 export function Accounts() {
+	const { sliderState, setSliderState } = useAccountController();
 	return (
 		<div className="rounded-2xl bg-teal-9 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<div className="flex flex-col gap-2">
@@ -24,12 +26,24 @@ export function Accounts() {
 
 			<div className="flex-1 flex flex-col justify-end">
 				<div>
-					<Swiper spaceBetween={16} slidesPerView={2.2}>
+					<Swiper
+						spaceBetween={16}
+						slidesPerView={2.2}
+						onSlideChange={(swiper) => {
+							setSliderState({
+								isBeginning: swiper.isBeginning,
+								isEnd: swiper.isEnd,
+							});
+						}}
+					>
 						<div className="flex justify-between mb-5" slot="container-start">
 							<strong className="text-white tracking-[-1px] text-lg">
 								Minhas Contas
 							</strong>
-							<AccountsNavigations />
+							<AccountsNavigations
+								isBeginning={sliderState.isBeginning}
+								isEnd={sliderState.isEnd}
+							/>
 						</div>
 
 						<div className="mt-5">
