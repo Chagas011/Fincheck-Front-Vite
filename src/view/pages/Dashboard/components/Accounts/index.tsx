@@ -7,19 +7,32 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { AccountsNavigations } from "./AccountsNavigations";
 import { useAccountController } from "./useAccountController";
+import { formatCurrency } from "@/lib/formatCurrence";
+import { useBalanceStore } from "@/store/balance";
+import { cn } from "@/lib/utils";
 
 export function Accounts() {
 	const { sliderState, setSliderState, windowWidth } = useAccountController();
+	const { showBalance, toggleBalance } = useBalanceStore();
 	return (
 		<div className="rounded-2xl bg-teal-9 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<div className="flex flex-col gap-2">
 				<span className="text-white tracking-[-0.5px]">Saldo Total</span>
 				<div className="flex gap-2 items-center">
-					<strong className="text-3xl tracking-[-1px] text-white">
-						R$ 10000,00
+					<strong
+						className={cn(
+							"text-3xl tracking-[-1px] text-white",
+							!showBalance && "blur-sm"
+						)}
+					>
+						{formatCurrency(10000)}
 					</strong>
-					<Button variant={"ghost"} className="w-8 h-8 hover:bg-teal-8">
-						<EyeIcon open />
+					<Button
+						variant={"ghost"}
+						className="w-8 h-8 hover:bg-teal-8"
+						onClick={toggleBalance}
+					>
+						{showBalance ? <EyeIcon open={false} /> : <EyeIcon open />}
 					</Button>
 				</div>
 			</div>

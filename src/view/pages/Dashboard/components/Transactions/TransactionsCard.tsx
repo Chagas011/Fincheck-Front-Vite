@@ -1,21 +1,55 @@
-import { Food } from "@/components/icons/categories/expense/Food";
 import { formatCurrency } from "@/lib/formatCurrence";
+import { cn } from "@/lib/utils";
+import { useBalanceStore } from "@/store/balance";
 
-export function TransactionCard() {
+interface TransactionCardProps {
+	transaction: "INCOME" | "EXPENSE";
+	icon: React.ReactNode;
+	name: string;
+	date: string;
+	price: number;
+}
+
+export function TransactionCard({
+	transaction,
+	icon,
+	name,
+	date,
+	price,
+}: TransactionCardProps) {
+	const { showBalance } = useBalanceStore();
+
 	return (
-		<div className="flex flex-col gap-4">
-			<div className="flex justify-between items-center">
+		<div className="flex flex-col gap-4 bg-white rounded-2xl p-3">
+			<div className="flex justify-between items-center ">
 				<div className="flex gap-4 items-center">
-					<Food />
+					{icon}
 					<div className="flex flex-col">
-						<strong className="text-lg text-gray-8">Almoco</strong>
-						<span className="text-sm text-gray-6">04/06/2023</span>
+						<strong className="text-lg text-gray-8">{name}</strong>
+						<span className="text-sm text-gray-6">{date}</span>
 					</div>
 				</div>
 				<div>
-					<span className="font-medium text-lg text-red-8">
-						-{formatCurrency(123)}
-					</span>
+					{transaction === "EXPENSE" && (
+						<span
+							className={cn(
+								"font-medium text-lg text-red-8",
+								!showBalance && "blur-sm"
+							)}
+						>
+							-{formatCurrency(price)}
+						</span>
+					)}
+					{transaction === "INCOME" && (
+						<span
+							className={cn(
+								"font-medium text-lg text-green-8",
+								!showBalance && "blur-sm"
+							)}
+						>
+							+{formatCurrency(price)}
+						</span>
+					)}
 				</div>
 			</div>
 		</div>

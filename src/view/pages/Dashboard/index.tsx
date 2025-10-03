@@ -16,7 +16,7 @@ export function Dashboard() {
 		return {};
 	}
 	return (
-		<div className=" h-full w-full p-4 lg:p-8 lg:pt-6 flex flex-col gap-4">
+		<div className="h-full w-full p-4 lg:p-8 lg:pt-6 flex flex-col gap-4 mb-5">
 			<header className="h-12 flex justify-between items-center">
 				<img src={logo} alt="logo" className="h-6" />
 				<div className="">

@@ -7,6 +7,8 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/formatCurrence";
+import { cn } from "@/lib/utils";
+import { useBalanceStore } from "@/store/balance";
 
 interface AccountCardProps {
 	color: string;
@@ -21,6 +23,7 @@ export function AccountCard({
 	currentBalance,
 	type,
 }: AccountCardProps) {
+	const { showBalance } = useBalanceStore();
 	return (
 		<Card
 			className="border-b-4 border-b-teal-6"
@@ -35,9 +38,15 @@ export function AccountCard({
 				</span>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-1">
-				<p className="font-medium tracking-[-0.5px]">
+				<p
+					className={cn(
+						"font-medium tracking-[-0.5px]",
+						!showBalance && "blur-sm"
+					)}
+				>
 					{formatCurrency(currentBalance)}
 				</p>
+
 				<span className="text-gray-6 tracking-[-0.5px]">Saldo Atual</span>
 			</CardContent>
 			<CardFooter />
