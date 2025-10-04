@@ -21,7 +21,7 @@ export function SwiperController() {
 				className="bg-transparent p-5 text-black hover:text-white hover:bg-teal-8 disabled:opacity-40"
 				onClick={() => swiperInstance?.slidePrev()}
 			>
-				<ChevronLeftIcon />
+				<ChevronLeftIcon className="!w-8 !h-8" />
 			</Button>
 
 			<Swiper
@@ -48,7 +48,7 @@ export function SwiperController() {
 				className="bg-transparent p-5 text-black hover:text-white hover:bg-teal-8 disabled:opacity-40"
 				onClick={() => swiperInstance?.slideNext()}
 			>
-				<ChevronRightIcon />
+				<ChevronRightIcon className="!w-8 !h-8" />
 			</Button>
 		</div>
 	);

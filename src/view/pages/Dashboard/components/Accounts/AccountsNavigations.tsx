@@ -14,18 +14,18 @@ export function AccountsNavigations({
 	return (
 		<div className="flex gap-2 items-center">
 			<Button
-				className="bg-transparent hover:bg-teal-8 pl-2.5 pr-3.5 disabled:opacity-40"
+				className="bg-transparent hover:bg-teal-8 disabled:opacity-40"
 				onClick={() => swiper.slidePrev()}
 				disabled={isBeginning}
 			>
-				<ChevronLeftIcon className="text-4xl w-10 h-10" />
+				<ChevronLeftIcon className="!w-8 !h-8" />
 			</Button>
 			<Button
-				className="bg-transparent hover:bg-teal-8 pl-2.5 pr-3.5"
+				className="bg-transparent hover:bg-teal-8 disabled:opacity-40"
 				onClick={() => swiper.slideNext()}
 				disabled={isEnd}
 			>
-				<ChevronRightIcon />
+				<ChevronRightIcon className="!w-8 !h-8" />
 			</Button>
 		</div>
 	);

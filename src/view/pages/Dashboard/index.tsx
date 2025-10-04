@@ -6,6 +6,7 @@ import logo from "../../../assets/logo.svg";
 import { AvatarDropDown } from "@/components/AvatarDropDown";
 import { Accounts } from "./components/Accounts";
 import { Transactions } from "./components/Transactions";
+import { Fab } from "./components/Fab";
 
 export function Dashboard() {
 	const { data, isFetching, isError } = useGetUser();
@@ -32,6 +33,7 @@ export function Dashboard() {
 					<Transactions />
 				</div>
 			</main>
+			<Fab />
 		</div>
 	);
 }
