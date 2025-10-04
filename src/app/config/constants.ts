@@ -12,3 +12,5 @@ export const MONTHS = [
 	"Nov",
 	"Dez",
 ];
+
+export const YEARS = ["2022", "2023", "2024", "2025"];

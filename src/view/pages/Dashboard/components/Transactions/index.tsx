@@ -1,4 +1,3 @@
-import { FilterIcon } from "@/components/icons/FilterIcon";
 import { Button } from "@/components/ui/button";
 import {
 	BanknoteArrowDown,
@@ -17,6 +16,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { FilterModal } from "./FilterModal";
 
 export function Transactions() {
 	const transactions: number[] = [1];
@@ -57,9 +58,8 @@ export function Transactions() {
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
-					<Button className="bg-teal-9 hover:bg-teal-7">
-						<FilterIcon />
-					</Button>
+
+					<FilterModal />
 				</div>
 			</header>
 
