@@ -16,7 +16,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { FilterModal } from "./FilterModal";
 
 export function Transactions() {
@@ -26,7 +25,7 @@ export function Transactions() {
 			<header>
 				<div className="flex justify-between items-center">
 					<DropdownMenu>
-						<DropdownMenuTrigger>
+						<DropdownMenuTrigger asChild>
 							<Button className="bg-teal-9 hover:bg-teal-7">
 								<TransactionIcon className=" fill-white !w-5 !h-5" />
 

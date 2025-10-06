@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+
 import { useSwiper } from "swiper/react";
 
 interface YearsCardProps {
@@ -10,6 +11,7 @@ interface YearsCardProps {
 }
 export function YearsCard({ year, isActive, index }: YearsCardProps) {
 	const swiper = useSwiper();
+
 	return (
 		<Card className="p-0 rounded-md">
 			<CardContent className="p-0">

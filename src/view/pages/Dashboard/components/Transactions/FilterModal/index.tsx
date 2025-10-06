@@ -9,17 +9,19 @@ import {
 } from "@/components/ui/dialog";
 import { FilterIcon } from "@/components/icons/FilterIcon";
 import { Button } from "@/components/ui/button";
-import { SwiperControllerYear } from "./SwiperControllerYear";
+import { SwiperControllerYear } from "../SwiperControllerYear";
+
+// TODO: REACT HOOK FORM
 export function FilterModal() {
 	return (
 		<div>
 			<Dialog>
-				<DialogTrigger>
+				<DialogTrigger asChild>
 					<Button className="bg-teal-9 hover:bg-teal-7">
 						<FilterIcon />
 					</Button>
 				</DialogTrigger>
-				<DialogContent className="max-w-md w-full">
+				<DialogContent className="max-w-sm w-ful p-4">
 					<DialogHeader>
 						<DialogTitle className="text-center">Filtros</DialogTitle>
 					</DialogHeader>
@@ -38,11 +40,12 @@ export function FilterModal() {
 
 					<div className="flex flex-col">
 						<h2 className="text-lg font-bold">Ano</h2>
+
 						<SwiperControllerYear />
 					</div>
-					<DialogFooter className="mt-5">
+					<DialogFooter className=" mt-5">
 						<DialogClose asChild>
-							<Button className="w-full h-[54px] bg-teal-9 hover:bg-teal-8 rounded-2xl">
+							<Button className="w-[355px] sm:w-full h-[54px] bg-teal-9 hover:bg-teal-8 rounded-2xl">
 								Aplicar Filtros
 							</Button>
 						</DialogClose>

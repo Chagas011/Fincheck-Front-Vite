@@ -17,7 +17,7 @@ export function Fab() {
 	return (
 		<div className="fixed bottom-6 right-6 z-50">
 			<DropdownMenu>
-				<DropdownMenuTrigger>
+				<DropdownMenuTrigger asChild>
 					<Button className="bg-teal-9 hover:bg-teal-7 rounded-full w-12 h-12">
 						<PlusIcon className="!w-8 !h-8" />
 					</Button>

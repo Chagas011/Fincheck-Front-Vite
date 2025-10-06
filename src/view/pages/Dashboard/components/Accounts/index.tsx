@@ -10,13 +10,14 @@ import { formatCurrency } from "@/lib/formatCurrence";
 import { useBalanceStore } from "@/store/balance";
 import { cn } from "@/lib/utils";
 
-import { EyeOffIcon, PlusCircleIcon } from "lucide-react";
+import { EyeOffIcon } from "lucide-react";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { NewAccountModal } from "./NewAccountModal";
 
 export function Accounts() {
 	const { sliderState, setSliderState, windowWidth } = useAccountController();
 	const { showBalance, toggleBalance } = useBalanceStore();
-	const accounts: number[] = [1];
+	const accounts: number[] = [];
 	return (
 		<div className="rounded-2xl bg-teal-9 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<div className="flex flex-col gap-2">
@@ -28,7 +29,7 @@ export function Accounts() {
 							!showBalance && "blur-sm"
 						)}
 					>
-						{accounts.length < 1 ? formatCurrency(0) : formatCurrency(10000)}
+						{accounts.length < 1 ? formatCurrency(0) : formatCurrency(85785.35)}
 					</strong>
 					<Button
 						variant={"ghost"}
@@ -111,14 +112,7 @@ export function Accounts() {
 						</div>
 
 						<div className="flex flex-col items-center justify-center mt-4">
-							<Button className="flex gap-3 flex-col  bg-teal-9 hover:bg-teal-6 w-full h-[204px] border-2 border-dashed border-teal-4 ">
-								<PlusCircleIcon className="!w-8 !h-8" />
-
-								<span className="font-medium tracking-[-0.5px] ">
-									Cadastre uma
-									<span className="block">nova Conta</span>
-								</span>
-							</Button>
+							<NewAccountModal />
 						</div>
 					</>
 				)}

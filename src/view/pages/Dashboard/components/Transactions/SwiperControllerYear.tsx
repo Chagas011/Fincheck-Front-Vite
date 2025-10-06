@@ -16,21 +16,22 @@ export function SwiperControllerYear() {
 	const [isEnd, setIsEnd] = useState(false);
 
 	return (
-		<div className="flex gap-4 items-center w-full max-w-sm mx-auto">
+		<div className="flex gap-4 items-center w-[355px] lg:w-full max-w-sm mx-auto">
 			<Button
 				disabled={isBeginning}
-				className="bg-transparent p-5 text-black hover:text-white hover:bg-teal-8 disabled:opacity-40"
+				className="bg-transparent  p-5 text-black hover:text-white hover:bg-teal-8 disabled:opacity-40"
 				onClick={() => swiperInstance?.slidePrev()}
 			>
-				<ChevronLeftIcon className="!w-8 !h-8" />
+				<ChevronLeftIcon className="!w-6 !h-6" />
 			</Button>
 
 			<Swiper
-				className="flex-1" // 🔑 força o swiper a ocupar só o espaço restante
+				className="flex-1" //
 				spaceBetween={16}
 				slidesPerView={1.3}
 				centeredSlides
 				onSwiper={setSwiperInstance}
+				initialSlide={YEARS.length - 1}
 				onSlideChange={(swiper) => {
 					setIsBeginning(swiper.isBeginning);
 					setIsEnd(swiper.isEnd);
@@ -50,7 +51,7 @@ export function SwiperControllerYear() {
 				className="bg-transparent p-5 text-black hover:text-white hover:bg-teal-8 disabled:opacity-40"
 				onClick={() => swiperInstance?.slideNext()}
 			>
-				<ChevronRightIcon className="!w-8 !h-8" />
+				<ChevronRightIcon className="!w-6 !h-6" />
 			</Button>
 		</div>
 	);

@@ -13,4 +13,6 @@ export const MONTHS = [
 	"Dez",
 ];
 
-export const YEARS = ["2022", "2023", "2024", "2025"];
+export const YEARS = Array.from({ length: 5 }, (_, i) =>
+	String(new Date().getFullYear() - (4 - i))
+);
