@@ -12,12 +12,13 @@ import {
 	Building,
 	PlusIcon,
 } from "lucide-react";
+import { NewAccountModal } from "../NewAccountModal";
 
 export function Fab() {
 	return (
 		<div className="fixed bottom-6 right-6 z-50">
 			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
+				<DropdownMenuTrigger>
 					<Button className="bg-teal-9 hover:bg-teal-7 rounded-full w-12 h-12">
 						<PlusIcon className="!w-8 !h-8" />
 					</Button>
@@ -38,11 +39,13 @@ export function Fab() {
 							<span className="text-sm">Nova Despesa</span>
 						</Button>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<Button className="flex h-12 justify-start gap-2 w-full bg-transparent hover:bg-gray-1 text-black">
-							<Building className="!w-5 !h-5 text-blue-7" />
-							<span className="text-sm">Nova Conta</span>
-						</Button>
+					<DropdownMenuItem asChild>
+						<NewAccountModal>
+							<Button className="flex h-12 justify-start gap-2 w-full bg-transparent hover:bg-gray-1 text-black">
+								<Building className="!w-5 !h-5 text-blue-7" />
+								<span className="text-sm">Nova Conta</span>
+							</Button>
+						</NewAccountModal>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
