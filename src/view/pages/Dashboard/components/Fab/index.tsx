@@ -6,13 +6,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import {
-	BanknoteArrowDown,
-	BanknoteArrowUp,
-	Building,
-	PlusIcon,
-} from "lucide-react";
+import { Building, PlusIcon } from "lucide-react";
 import { NewAccountModal } from "../NewAccountModal";
+import { NewExpenseModal } from "./NewExpenseModal";
+import { NewIncomeModal } from "./NewIncomeModal";
 
 export function Fab() {
 	return (
@@ -24,26 +21,22 @@ export function Fab() {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent
-					className="px-1 w-[164px] h-[248px] flex flex-col justify-evenly"
+					className="p-0 w-[164px] h-[248px] flex flex-col justify-evenly"
 					align="end"
 				>
-					<DropdownMenuItem>
-						<Button className="flex gap-2 h-12 justify-start w-full bg-transparent hover:bg-gray-1 text-black">
-							<BanknoteArrowUp className="!w-5 !h-5 text-teal-7" />
-							<span className="text-sm">Nova Receita</span>
-						</Button>
+					<DropdownMenuItem className="p-0" asChild>
+						<NewIncomeModal />
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<Button className="flex h-12 justify-start gap-2 w-full bg-transparent text-black hover:bg-gray-1">
-							<BanknoteArrowDown className="!w-5 !h-5 text-red-7" />
-							<span className="text-sm">Nova Despesa</span>
-						</Button>
+					<DropdownMenuItem className="p-0" asChild>
+						<NewExpenseModal />
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
 						<NewAccountModal>
-							<Button className="flex h-12 justify-start gap-2 w-full bg-transparent hover:bg-gray-1 text-black">
-								<Building className="!w-5 !h-5 text-blue-7" />
-								<span className="text-sm">Nova Conta</span>
+							<Button className="flex h-12 justify-start  gap-2 w-full bg-transparent hover:bg-gray-1 text-black">
+								<div className="flex gap-2">
+									<Building className="!w-5 !h-5 text-blue-7" />
+									<span className="text-sm">Nova Conta</span>
+								</div>
 							</Button>
 						</NewAccountModal>
 					</DropdownMenuItem>
