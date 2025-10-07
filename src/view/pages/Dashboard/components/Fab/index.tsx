@@ -31,7 +31,7 @@ export function Fab() {
 						<NewExpenseModal />
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
-						<NewAccountModal>
+						<NewAccountModal title="Nova Conta">
 							<Button className="flex h-12 justify-start  gap-2 w-full bg-transparent hover:bg-gray-1 text-black">
 								<div className="flex gap-2">
 									<Building className="!w-5 !h-5 text-blue-7" />

@@ -39,12 +39,19 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { COLORS } from "@/app/config/constants";
+import { useCreateBankAccount } from "@/hooks/bankAccounts/create";
+import { numericValue } from "@/lib/formatCurrence";
+import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
+import { useEffect } from "react";
+import { useUpdateBankAccount } from "@/hooks/bankAccounts/update";
 
 interface NewAccountModalProps {
 	children: React.ReactNode;
+	id?: string;
+	title: string;
 }
 
-export function NewAccountModal({ children }: NewAccountModalProps) {
+export function NewAccountModal({ children, id, title }: NewAccountModalProps) {
 	const form = useForm<NewAccountSchema>({
 		resolver: zodResolver(newAccountSchema),
 		defaultValues: {
@@ -55,9 +62,65 @@ export function NewAccountModal({ children }: NewAccountModalProps) {
 		},
 		mode: "onChange",
 	});
+	const { mutate } = useCreateBankAccount();
+	const { mutate: update } = useUpdateBankAccount();
+	const { data: accounts } = useGetBankAccounts();
+	useEffect(() => {
+		if (id && accounts) {
+			const account = accounts.find((acc) => acc.id === id);
+			if (account) {
+				form.reset({
+					name: account.name,
+					initialBalance: String(account.currentBalance),
+					color: account.color,
+					type: account.type,
+				});
+			}
+		}
+	}, [id, accounts, form]);
+
 	const handleSubmit = form.handleSubmit(
 		({ color, initialBalance, name, type }) => {
-			console.log({ color, initialBalance, name, type });
+			const payload = {
+				color,
+				initialBalance: numericValue(initialBalance),
+				name,
+				type,
+			};
+			if (id) {
+				update(
+					{
+						id,
+						data: {
+							color,
+							initialBalance: numericValue(initialBalance),
+							name,
+							type,
+						},
+					},
+					{
+						onSuccess: () => {
+							form.reset({
+								name: "",
+								color: "",
+								initialBalance: "",
+								type: "CASH",
+							});
+						},
+					}
+				);
+			} else {
+				mutate(payload, {
+					onSuccess: () => {
+						form.reset({
+							name: "",
+							color: "",
+							initialBalance: "",
+							type: "CASH",
+						});
+					},
+				});
+			}
 		}
 	);
 	return (
@@ -66,7 +129,7 @@ export function NewAccountModal({ children }: NewAccountModalProps) {
 				<DialogTrigger asChild>{children}</DialogTrigger>
 				<DialogContent className="max-w-sm w-ful p-4">
 					<DialogHeader>
-						<DialogTitle className="text-center">Nova Conta</DialogTitle>
+						<DialogTitle className="text-center">{title}</DialogTitle>
 					</DialogHeader>
 					<Form {...form}>
 						<form onSubmit={handleSubmit} className="space-y-4 mt-10">

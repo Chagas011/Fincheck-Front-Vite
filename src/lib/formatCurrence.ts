@@ -4,3 +4,10 @@ export function formatCurrency(value: number) {
 		currency: "BRL",
 	}).format(value);
 }
+export function numericValue(value: string) {
+	return Number(
+		String(value)
+			.replace(/[^\d,]/g, "")
+			.replace(",", ".")
+	);
+}

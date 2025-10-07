@@ -19,7 +19,7 @@ import {
 import { FilterModal } from "./FilterModal";
 
 export function Transactions() {
-	const transactions: number[] = [1];
+	const transactions: number[] = [];
 	return (
 		<div className="rounded-2xl bg-gray-100 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<header>

@@ -13,11 +13,18 @@ import { cn } from "@/lib/utils";
 import { EyeOffIcon, PlusCircleIcon } from "lucide-react";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { NewAccountModal } from "../NewAccountModal";
+import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
 
 export function Accounts() {
 	const { sliderState, setSliderState, windowWidth } = useAccountController();
 	const { showBalance, toggleBalance } = useBalanceStore();
-	const accounts: number[] = [];
+
+	const { data } = useGetBankAccounts();
+	const accounts = data ?? [];
+	const totalBalance = accounts.reduce(
+		(acc, account) => acc + account.currentBalance,
+		0
+	);
 	return (
 		<div className="rounded-2xl bg-teal-9 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<div className="flex flex-col gap-2">
@@ -29,7 +36,9 @@ export function Accounts() {
 							!showBalance && "blur-sm"
 						)}
 					>
-						{accounts.length < 1 ? formatCurrency(0) : formatCurrency(85785.35)}
+						{accounts.length < 1
+							? formatCurrency(0)
+							: formatCurrency(totalBalance)}
 					</strong>
 					<Button
 						variant={"ghost"}
@@ -73,32 +82,17 @@ export function Accounts() {
 								</div>
 
 								<div className="mt-5">
-									<SwiperSlide>
-										<AccountCard
-											color="#7950f2"
-											currentBalance={300}
-											name="Nubank"
-											type="CASH"
-										/>
-									</SwiperSlide>
-
-									<SwiperSlide>
-										<AccountCard
-											color="#f05e22"
-											currentBalance={5000}
-											name="XP INVESTMENT"
-											type="INVESTMENT"
-										/>
-									</SwiperSlide>
-
-									<SwiperSlide>
-										<AccountCard
-											color="#f05e22"
-											currentBalance={5000}
-											name="XP INVESTMENT"
-											type="INVESTMENT"
-										/>
-									</SwiperSlide>
+									{accounts.map((account) => (
+										<SwiperSlide>
+											<AccountCard
+												id={account.id}
+												color={account.color}
+												currentBalance={account.currentBalance}
+												name={account.name}
+												type={account.type}
+											/>
+										</SwiperSlide>
+									))}
 								</div>
 							</Swiper>
 						</div>
@@ -112,7 +106,7 @@ export function Accounts() {
 						</div>
 
 						<div className="flex flex-col items-center justify-center mt-4">
-							<NewAccountModal>
+							<NewAccountModal title="Nova Conta">
 								<Button className="flex gap-3 flex-col  bg-teal-9 hover:bg-teal-6 w-full h-[204px] border-2 border-dashed border-teal-4 ">
 									<PlusCircleIcon className="!w-8 !h-8" />
 
