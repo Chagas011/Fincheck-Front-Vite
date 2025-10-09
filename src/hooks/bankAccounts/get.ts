@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 export const useGetBankAccounts = () => {
 	return useQuery({
-		queryKey: ["bankAccounts", "transaction"],
+		queryKey: ["bankAccounts"],
 		queryFn: async () => {
 			try {
 				const data = await get();

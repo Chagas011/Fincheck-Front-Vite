@@ -10,9 +10,19 @@ import {
 import { FilterIcon } from "@/components/icons/FilterIcon";
 import { Button } from "@/components/ui/button";
 import { SwiperControllerYear } from "../SwiperControllerYear";
+import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
 
-// TODO: REACT HOOK FORM
-export function FilterModal() {
+interface FilterModalProps {
+	onChangeYear: (year: number) => void;
+	onChangeBankAccountId: (bankAccountId: string | undefined) => void;
+}
+
+export function FilterModal({
+	onChangeYear,
+	onChangeBankAccountId,
+}: FilterModalProps) {
+	const { data } = useGetBankAccounts();
+	const accounts = data ?? [];
 	return (
 		<div>
 			<Dialog>
@@ -27,21 +37,27 @@ export function FilterModal() {
 					</DialogHeader>
 					<div className="flex flex-col gap-4">
 						<h2 className="text-lg font-bold">Conta</h2>
-						<Button className="flex justify-start w-full h-[40px] bg-transparent hover:bg-gray-1 text-black">
-							XP Investimentos
-						</Button>
-						<Button className="flex justify-start w-full h-[40px] bg-transparent hover:bg-gray-1 text-black">
-							Nubank
-						</Button>
-						<Button className="flex justify-start w-full h-[40px] bg-transparent hover:bg-gray-1 text-black">
-							Carteira
+						{accounts.map((account) => (
+							<Button
+								key={account.id}
+								onClick={() => onChangeBankAccountId(account.id)}
+								className="flex justify-start w-full h-[40px] bg-transparent hover:bg-gray-1 text-black"
+							>
+								{account.name}
+							</Button>
+						))}
+						<Button
+							onClick={() => onChangeBankAccountId(undefined)}
+							className="flex justify-center w-[200px] h-[40px] bg-transparent hover:bg-teal-8 text-black"
+						>
+							Limpar Filtro - Meses
 						</Button>
 					</div>
 
 					<div className="flex flex-col">
 						<h2 className="text-lg font-bold">Ano</h2>
 
-						<SwiperControllerYear />
+						<SwiperControllerYear onChangeYear={onChangeYear} />
 					</div>
 					<DialogFooter className=" mt-5">
 						<DialogClose asChild>

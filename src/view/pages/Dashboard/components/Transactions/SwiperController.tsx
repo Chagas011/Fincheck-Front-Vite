@@ -9,7 +9,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { MONTHS } from "@/app/config/constants";
 import { MonthsCard } from "./MonthsCard";
 
-export function SwiperController() {
+interface SwiperControllerProps {
+	onChangeMonth: (month: number) => void;
+}
+
+export function SwiperController({ onChangeMonth }: SwiperControllerProps) {
 	const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 	const [isBeginning, setIsBeginning] = useState(true);
 	const [isEnd, setIsEnd] = useState(false);
@@ -28,10 +32,12 @@ export function SwiperController() {
 				spaceBetween={16}
 				slidesPerView={3}
 				centeredSlides
+				initialSlide={new Date().getMonth()}
 				onSwiper={setSwiperInstance}
 				onSlideChange={(swiper) => {
 					setIsBeginning(swiper.isBeginning);
 					setIsEnd(swiper.isEnd);
+					onChangeMonth(swiper.activeIndex);
 				}}
 			>
 				{MONTHS.map((month, index) => (

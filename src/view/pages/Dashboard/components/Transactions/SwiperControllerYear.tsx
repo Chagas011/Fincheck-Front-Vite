@@ -9,8 +9,12 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { YEARS } from "@/app/config/constants";
 
 import { YearsCard } from "./YearsCard";
-
-export function SwiperControllerYear() {
+interface SwiperControllerYearProps {
+	onChangeYear: (year: number) => void;
+}
+export function SwiperControllerYear({
+	onChangeYear,
+}: SwiperControllerYearProps) {
 	const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 	const [isBeginning, setIsBeginning] = useState(true);
 	const [isEnd, setIsEnd] = useState(false);
@@ -35,6 +39,7 @@ export function SwiperControllerYear() {
 				onSlideChange={(swiper) => {
 					setIsBeginning(swiper.isBeginning);
 					setIsEnd(swiper.isEnd);
+					onChangeYear(Number(YEARS[swiper.activeIndex]));
 				}}
 			>
 				{YEARS.map((year, index) => (

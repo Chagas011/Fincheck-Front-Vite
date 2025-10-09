@@ -30,23 +30,40 @@ import { NumericFormat } from "react-number-format";
 import { incomeSchema, type IncomeSchemaType } from "./schema";
 import { BanknoteArrowUp } from "lucide-react";
 import { DatePickerField } from "@/components/DatePicker";
+import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
+import { useGetCategories } from "@/hooks/categories/get";
+import { useCreateTransaction } from "@/hooks/transactions/create";
+import { numericValue } from "@/lib/formatCurrence";
 
 export function NewIncomeModal() {
 	const form = useForm<IncomeSchemaType>({
 		resolver: zodResolver(incomeSchema),
 		defaultValues: {
 			name: "",
-			bankAccount: "",
-			category: "",
-			date: undefined,
+			bankAccountId: "",
+			categoryId: "",
+			date: new Date(),
 			value: "",
 			type: "INCOME",
 		},
 		mode: "onChange",
 	});
+	const { mutate } = useCreateTransaction();
+	const { data } = useGetBankAccounts();
+	const accounts = data ?? [];
+	const { data: category } = useGetCategories();
+	const categories =
+		category?.filter((categorie) => categorie.type === "INCOME") ?? [];
 	const handleSubmit = form.handleSubmit(
-		({ value, name, category, bankAccount, date, type }) => {
-			console.log({ value, name, category, bankAccount, date, type });
+		({ value, name, categoryId, bankAccountId, date, type }) => {
+			mutate({
+				value: numericValue(value),
+				name,
+				categoryId,
+				bankAccountId,
+				date,
+				type,
+			});
 		}
 	);
 	return (
@@ -109,7 +126,7 @@ export function NewIncomeModal() {
 							/>
 							<FormField
 								control={form.control}
-								name="category"
+								name="categoryId"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
@@ -121,12 +138,14 @@ export function NewIncomeModal() {
 													<SelectValue placeholder="Categoria" />
 												</SelectTrigger>
 												<SelectContent className="w-full min-w-full">
-													<SelectItem value="alimentacao" className="h-12 px-4">
-														Alimentacao
-													</SelectItem>
-													<SelectItem value="Contas" className="h-12 px-4">
-														Contas
-													</SelectItem>
+													{categories.map((category) => (
+														<SelectItem
+															value={category.id}
+															className="h-12 px-4"
+														>
+															{category.name}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 										</FormControl>
@@ -137,7 +156,7 @@ export function NewIncomeModal() {
 
 							<FormField
 								control={form.control}
-								name="bankAccount"
+								name="bankAccountId"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
@@ -149,12 +168,14 @@ export function NewIncomeModal() {
 													<SelectValue placeholder="Receber na conta" />
 												</SelectTrigger>
 												<SelectContent className="w-full min-w-full">
-													<SelectItem value="nubank" className="h-12 px-4">
-														Nubank
-													</SelectItem>
-													<SelectItem value="itau" className="h-12 px-4">
-														Itau
-													</SelectItem>
+													{accounts.map((account) => (
+														<SelectItem
+															value={account.id}
+															className="h-12 px-4"
+														>
+															{account.name}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 										</FormControl>

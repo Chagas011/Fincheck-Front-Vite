@@ -8,6 +8,7 @@ export const useCreateTransaction = () => {
 		mutationFn: create,
 		onSuccess: () => {
 			toast.success("Nova transacao criada com sucesso");
+			queryClient.invalidateQueries({ queryKey: ["bankAccounts"] });
 			queryClient.invalidateQueries({ queryKey: ["transaction"] });
 		},
 
