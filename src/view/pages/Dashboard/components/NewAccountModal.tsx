@@ -42,8 +42,10 @@ import { COLORS } from "@/app/config/constants";
 import { useCreateBankAccount } from "@/hooks/bankAccounts/create";
 import { numericValue } from "@/lib/formatCurrence";
 import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUpdateBankAccount } from "@/hooks/bankAccounts/update";
+
+import { DeleteAccountModal } from "./Accounts/DeleteAccountModal";
 
 interface NewAccountModalProps {
 	children: React.ReactNode;
@@ -62,6 +64,8 @@ export function NewAccountModal({ children, id, title }: NewAccountModalProps) {
 		},
 		mode: "onChange",
 	});
+
+	const [open, setOpen] = useState(false);
 	const { mutate } = useCreateBankAccount();
 	const { mutate: update } = useUpdateBankAccount();
 	const { data: accounts } = useGetBankAccounts();
@@ -106,6 +110,7 @@ export function NewAccountModal({ children, id, title }: NewAccountModalProps) {
 								initialBalance: "",
 								type: "CASH",
 							});
+							setOpen(false);
 						},
 					}
 				);
@@ -125,10 +130,15 @@ export function NewAccountModal({ children, id, title }: NewAccountModalProps) {
 	);
 	return (
 		<div className="w-full">
-			<Dialog>
+			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogTrigger asChild>{children}</DialogTrigger>
 				<DialogContent className="max-w-sm w-ful p-4">
 					<DialogHeader>
+						{id && (
+							<div>
+								<DeleteAccountModal id={id} onSuccess={() => setOpen(false)} />
+							</div>
+						)}
 						<DialogTitle className="text-center">{title}</DialogTitle>
 					</DialogHeader>
 					<Form {...form}>

@@ -1,16 +1,16 @@
-import { get } from "@/app/services/bankAccountService/get";
+import { get } from "@/app/services/categoryService/get";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useGetBankAccounts = () => {
+export const useGetCategories = () => {
 	return useQuery({
-		queryKey: ["bankAccounts", "transaction"],
+		queryKey: ["categories"],
 		queryFn: async () => {
 			try {
 				const data = await get();
 				return data;
 			} catch {
-				toast.error("Erro ao acessar contas");
+				toast.error("Erro ao acessar categories");
 			}
 		},
 		retry: false,

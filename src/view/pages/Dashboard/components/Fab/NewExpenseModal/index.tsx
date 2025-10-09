@@ -30,23 +30,41 @@ import { NumericFormat } from "react-number-format";
 import { expenseSchema, type ExpenseSchemaType } from "./schema";
 import { BanknoteArrowDown } from "lucide-react";
 import { DatePickerField } from "@/components/DatePicker";
+import { numericValue } from "@/lib/formatCurrence";
+import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
+import { useGetCategories } from "@/hooks/categories/get";
+import { useCreateTransaction } from "@/hooks/transactions/create";
 
 export function NewExpenseModal() {
 	const form = useForm<ExpenseSchemaType>({
 		resolver: zodResolver(expenseSchema),
 		defaultValues: {
 			name: "",
-			bankAccount: "",
-			category: "",
-			date: undefined,
+			bankAccountId: "",
+			categoryId: "",
+			date: new Date(),
 			value: "",
 			type: "EXPENSE",
 		},
 		mode: "onChange",
 	});
+	const { data } = useGetBankAccounts();
+	const accounts = data ?? [];
+	const { data: category } = useGetCategories();
+	const categories =
+		category?.filter((categorie) => categorie.type === "EXPENSE") ?? [];
+
+	const { mutate } = useCreateTransaction();
 	const handleSubmit = form.handleSubmit(
-		({ value, name, category, bankAccount, date, type }) => {
-			console.log({ value, name, category, bankAccount, date, type });
+		({ value, name, categoryId, bankAccountId, date, type }) => {
+			mutate({
+				value: numericValue(value),
+				name,
+				categoryId,
+				bankAccountId,
+				date,
+				type,
+			});
 		}
 	);
 	return (
@@ -60,10 +78,10 @@ export function NewExpenseModal() {
 				</DialogTrigger>
 				<DialogContent className="max-w-sm w-ful p-4">
 					<DialogHeader>
-						<DialogTitle className="text-center">Nova Conta</DialogTitle>
+						<DialogTitle className="text-center">Nova Despesa</DialogTitle>
 					</DialogHeader>
 					<FormProvider {...form}>
-						<form onSubmit={handleSubmit} className="space-y-4 mt-10">
+						<form onSubmit={handleSubmit} className="space-y-4 mt-6">
 							<FormField
 								control={form.control}
 								name="value"
@@ -107,37 +125,10 @@ export function NewExpenseModal() {
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="category"
-								render={({ field }) => (
-									<FormItem>
-										<FormControl>
-											<Select
-												onValueChange={field.onChange}
-												value={field.value}
-											>
-												<SelectTrigger className="w-full py-5">
-													<SelectValue placeholder="Categoria" />
-												</SelectTrigger>
-												<SelectContent className="w-full min-w-full">
-													<SelectItem value="alimentacao" className="h-12 px-4">
-														Alimentacao
-													</SelectItem>
-													<SelectItem value="Contas" className="h-12 px-4">
-														Contas
-													</SelectItem>
-												</SelectContent>
-											</Select>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
 
 							<FormField
 								control={form.control}
-								name="bankAccount"
+								name="bankAccountId"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
@@ -148,13 +139,20 @@ export function NewExpenseModal() {
 												<SelectTrigger className="w-full py-5">
 													<SelectValue placeholder="Pagar com" />
 												</SelectTrigger>
-												<SelectContent className="w-full min-w-full">
-													<SelectItem value="nubank" className="h-12 px-4">
-														Nubank
-													</SelectItem>
-													<SelectItem value="itau" className="h-12 px-4">
-														Itau
-													</SelectItem>
+												<SelectContent
+													className="w-full min-w-full"
+													side="bottom"
+													align="start"
+													sideOffset={4}
+												>
+													{accounts.map((account) => (
+														<SelectItem
+															value={account.id}
+															className="h-12 px-4"
+														>
+															{account.name}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 										</FormControl>
@@ -162,7 +160,40 @@ export function NewExpenseModal() {
 									</FormItem>
 								)}
 							/>
-
+							<FormField
+								control={form.control}
+								name="categoryId"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<SelectTrigger className="w-full py-5">
+													<SelectValue placeholder="Categoria" />
+												</SelectTrigger>
+												<SelectContent
+													className="w-full min-w-full"
+													side="bottom"
+													align="start"
+													sideOffset={4}
+												>
+													{categories.map((category) => (
+														<SelectItem
+															value={category.id}
+															className="h-12 px-4"
+														>
+															{category.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<DatePickerField name="date" />
 
 							<DialogClose asChild>
