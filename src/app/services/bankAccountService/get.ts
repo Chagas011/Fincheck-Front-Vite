@@ -9,6 +9,7 @@ interface BankAccountResponse {
 }
 
 export const get = async () => {
+	await new Promise((resolve) => setTimeout(resolve, 100));
 	const response = await httpClient.get<BankAccountResponse[] | []>(
 		"/bank-accounts"
 	);

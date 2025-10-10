@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-expect-error not-types
@@ -11,13 +11,22 @@ import { MonthsCard } from "./MonthsCard";
 
 interface SwiperControllerProps {
 	onChangeMonth: (month: number) => void;
+	month: number;
 }
 
-export function SwiperController({ onChangeMonth }: SwiperControllerProps) {
+export function SwiperController({
+	onChangeMonth,
+	month,
+}: SwiperControllerProps) {
 	const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 	const [isBeginning, setIsBeginning] = useState(true);
 	const [isEnd, setIsEnd] = useState(false);
 
+	useEffect(() => {
+		if (swiperInstance) {
+			swiperInstance.slideTo(month);
+		}
+	}, [month, swiperInstance]);
 	return (
 		<div className="flex gap-4 items-center">
 			<Button
@@ -32,7 +41,6 @@ export function SwiperController({ onChangeMonth }: SwiperControllerProps) {
 				spaceBetween={16}
 				slidesPerView={3}
 				centeredSlides
-				initialSlide={new Date().getMonth()}
 				onSwiper={setSwiperInstance}
 				onSlideChange={(swiper) => {
 					setIsBeginning(swiper.isBeginning);

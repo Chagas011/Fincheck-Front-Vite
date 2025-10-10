@@ -14,17 +14,23 @@ import { EyeOffIcon, PlusCircleIcon } from "lucide-react";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { NewAccountModal } from "../NewAccountModal";
 import { useGetBankAccounts } from "@/hooks/bankAccounts/get";
+import { AccountsLoader } from "./AccountsLoader";
 
 export function Accounts() {
 	const { sliderState, setSliderState, windowWidth } = useAccountController();
 	const { showBalance, toggleBalance } = useBalanceStore();
 
-	const { data } = useGetBankAccounts();
+	const { data, isLoading } = useGetBankAccounts();
+
 	const accounts = data ?? [];
 	const totalBalance = accounts.reduce(
 		(acc, account) => acc + account.currentBalance,
 		0
 	);
+	if (isLoading) {
+		return <AccountsLoader />;
+	}
+
 	return (
 		<div className="rounded-2xl bg-teal-9 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<div className="flex flex-col gap-2">

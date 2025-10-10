@@ -22,6 +22,7 @@ interface TransactionsFilters {
 }
 
 export const get = async (filters: TransactionsFilters) => {
+	await new Promise((resolve) => setTimeout(resolve, 100));
 	const response = await httpClient.get<TransactionsResponse[] | []>(
 		"/transactions",
 		{

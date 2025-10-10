@@ -11,6 +11,7 @@ export const useGetBankAccounts = () => {
 				return data;
 			} catch {
 				toast.error("Erro ao acessar contas");
+				return [];
 			}
 		},
 		retry: false,

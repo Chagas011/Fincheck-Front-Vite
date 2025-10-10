@@ -20,18 +20,27 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import { NewUpdateTransactionModal } from "./UpdateModalTransaction";
+import { TransactionsLoader } from "./TransactionsLoader";
 
 export function Transactions() {
-	const [month, setMonth] = useState(new Date().getMonth() + 1);
+	const [month, setMonth] = useState(new Date().getMonth());
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [type, setType] = useState<"INCOME" | "EXPENSE" | undefined>(undefined);
 	const [bankAccountId, setBankAccountId] = useState<string | undefined>(
 		undefined
 	);
-	const { data } = useGetTransactions({ month, year, type, bankAccountId });
+	const { data, isLoading } = useGetTransactions({
+		month,
+		year,
+		type,
+		bankAccountId,
+	});
 	const [transactionTitle, setTransactionTile] = useState("Transações");
 	const transactions = data ?? [];
 
+	if (isLoading) {
+		return <TransactionsLoader />;
+	}
 	return (
 		<div className="rounded-2xl bg-gray-100 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<header>
@@ -96,7 +105,7 @@ export function Transactions() {
 			</header>
 
 			<div className="mt-6">
-				<SwiperController onChangeMonth={setMonth} />
+				<SwiperController onChangeMonth={setMonth} month={month} />
 			</div>
 
 			{transactions.length > 0 ? (
