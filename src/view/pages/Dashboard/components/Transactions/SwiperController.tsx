@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Swiper, SwiperSlide } from "swiper/react";
-// @ts-expect-error not-types
-import "swiper/css";
 import type { Swiper as SwiperType } from "swiper";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+// @ts-expect-error not-types
 
+import "swiper/css";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { MONTHS } from "@/app/config/constants";
 import { MonthsCard } from "./MonthsCard";
 
 interface SwiperControllerProps {
 	onChangeMonth: (month: number) => void;
-	month: number;
+	month: number; // estado externo para inicialSlide
 }
 
 export function SwiperController({
@@ -22,11 +22,6 @@ export function SwiperController({
 	const [isBeginning, setIsBeginning] = useState(true);
 	const [isEnd, setIsEnd] = useState(false);
 
-	useEffect(() => {
-		if (swiperInstance) {
-			swiperInstance.slideTo(month);
-		}
-	}, [month, swiperInstance]);
 	return (
 		<div className="flex gap-4 items-center">
 			<Button
@@ -41,6 +36,7 @@ export function SwiperController({
 				spaceBetween={16}
 				slidesPerView={3}
 				centeredSlides
+				initialSlide={month}
 				onSwiper={setSwiperInstance}
 				onSlideChange={(swiper) => {
 					setIsBeginning(swiper.isBeginning);
@@ -48,10 +44,15 @@ export function SwiperController({
 					onChangeMonth(swiper.activeIndex);
 				}}
 			>
-				{MONTHS.map((month, index) => (
-					<SwiperSlide key={month}>
+				{MONTHS.map((m, index) => (
+					<SwiperSlide key={m}>
 						{({ isActive }) => (
-							<MonthsCard month={month} isActive={isActive} index={index} />
+							<MonthsCard
+								month={m}
+								index={index}
+								isActive={isActive}
+								onClickMonth={() => swiperInstance?.slideTo(index, 300)}
+							/>
 						)}
 					</SwiperSlide>
 				))}

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useSwiper } from "swiper/react";
 
 interface YearsCardProps {
-	year: string;
+	year: number;
 	isActive: boolean;
 	index: number;
 }

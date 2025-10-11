@@ -5,7 +5,7 @@ import {
 	CircleChevronDownIcon,
 } from "lucide-react";
 import { TransactionCard } from "./TransactionsCard";
-import { SwiperController } from "./SwiperController";
+
 import { TransactionIcon } from "@shopify/polaris-icons";
 import emptyState from "@/assets/EmptyState.svg";
 import {
@@ -21,6 +21,7 @@ import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import { NewUpdateTransactionModal } from "./UpdateModalTransaction";
 import { TransactionsLoader } from "./TransactionsLoader";
+import { SwiperController } from "./SwiperController";
 
 export function Transactions() {
 	const [month, setMonth] = useState(new Date().getMonth());
@@ -38,9 +39,6 @@ export function Transactions() {
 	const [transactionTitle, setTransactionTile] = useState("Transações");
 	const transactions = data ?? [];
 
-	if (isLoading) {
-		return <TransactionsLoader />;
-	}
 	return (
 		<div className="rounded-2xl bg-gray-100 h-full w-full lg:p-10 px-4 py-8 flex flex-col">
 			<header>
@@ -100,6 +98,8 @@ export function Transactions() {
 					<FilterModal
 						onChangeYear={setYear}
 						onChangeBankAccountId={setBankAccountId}
+						currentYear={year}
+						currentBankAccountId={bankAccountId}
 					/>
 				</div>
 			</header>
@@ -108,41 +108,41 @@ export function Transactions() {
 				<SwiperController onChangeMonth={setMonth} month={month} />
 			</div>
 
-			{transactions.length > 0 ? (
-				<>
-					<div className="flex-1 mt-6 overflow-y-auto flex flex-col space-y-2">
-						{transactions.map((transaction) => (
-							<NewUpdateTransactionModal
-								id={transaction.id}
-								bankAccountId={transaction.bankAccountId}
-								categoryId={transaction.category?.id}
-								date={transaction.date}
+			<div className="flex-1 mt-6 overflow-y-auto flex flex-col space-y-2">
+				{isLoading ? (
+					// Loader só para as transactions
+					<TransactionsLoader />
+				) : transactions.length > 0 ? (
+					transactions.map((transaction) => (
+						<NewUpdateTransactionModal
+							id={transaction.id}
+							bankAccountId={transaction.bankAccountId}
+							categoryId={transaction.category?.id}
+							date={transaction.date}
+							name={transaction.name}
+							type={transaction.type}
+							value={String(transaction.value)}
+							key={transaction.id}
+						>
+							<TransactionCard
+								transaction={transaction.type}
+								category={transaction.category}
 								name={transaction.name}
-								type={transaction.type}
-								value={String(transaction.value)}
-								key={transaction.id}
-							>
-								<TransactionCard
-									transaction={transaction.type}
-									category={transaction.category}
-									name={transaction.name}
-									date={format(new Date(transaction.date), "dd/MM,yyyy", {
-										locale: ptBR,
-									})}
-									price={transaction.value}
-								/>
-							</NewUpdateTransactionModal>
-						))}
-					</div>
-				</>
-			) : (
-				<>
+								date={format(new Date(transaction.date), "dd/MM,yyyy", {
+									locale: ptBR,
+								})}
+								price={transaction.value}
+							/>
+						</NewUpdateTransactionModal>
+					))
+				) : (
+					// Empty state quando não há transactions
 					<div className="flex flex-col justify-center items-center w-full h-full">
 						<img src={emptyState} alt="emptyState" />
 						<p className="text-lg">Não encontramos nenhuma transação!</p>
 					</div>
-				</>
-			)}
+				)}
+			</div>
 		</div>
 	);
 }
